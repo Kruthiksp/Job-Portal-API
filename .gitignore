@@ -1,0 +1,33 @@
+/.metadata/
+
+# Java build files
+/target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+*.iml
+
+#test files
+/src/test/java/
+
+# IDE specific files
+# Eclipse / STS
+.project
+.classpath
+.settings/
+.metadata/
+
+# Build tool
+# Maven
+target/
+log/
+dependency-reduced-pom.xml
+build.log
+
+# Ignore node_modules(these can be re-generated with "npm install")
+node_modules/   
+
+# sonarlint
+.sonarlint/
