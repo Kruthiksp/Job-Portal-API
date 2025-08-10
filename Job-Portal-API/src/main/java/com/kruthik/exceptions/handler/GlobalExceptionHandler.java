@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -65,6 +66,18 @@ public class GlobalExceptionHandler {
 
 		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.BAD_REQUEST)
 				.statusCode(HttpStatus.BAD_REQUEST.value()).timestamp(LocalDateTime.now()).build();
+
+		return ResponseEntity.status(error.getStatusCode()).body(error);
+	}
+
+	/**
+	 * This method is executed when the user tries to login with wrong email Id.
+	 */
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<ErrorDTO> handleUsernameNotFoundException(UsernameNotFoundException e) {
+
+		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.NOT_FOUND)
+				.statusCode(HttpStatus.NOT_FOUND.value()).timestamp(LocalDateTime.now()).build();
 
 		return ResponseEntity.status(error.getStatusCode()).body(error);
 	}

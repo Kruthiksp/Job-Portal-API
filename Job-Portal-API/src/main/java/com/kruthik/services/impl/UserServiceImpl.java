@@ -1,5 +1,6 @@
 package com.kruthik.services.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kruthik.dtos.UserRequestDTO;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+	private final PasswordEncoder passwordEncoder;
 	private final UserMapper userMapper;
 	private final UserRepository userRepository;
 
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
 			throw new UserAlreadyExistException("User Already Exist with the Email Id: " + userDTO.getEmail());
 		} else {
 			User dtoToEntity = userMapper.dtoToEntity(userDTO);
+			dtoToEntity.setPassword(passwordEncoder.encode(dtoToEntity.getPassword()));
 
 			if (userDTO.getAccountType() == AccountType.Recruiter && userDTO.getCompanyName() != null) {
 				dtoToEntity.setRole(Roles.ROLE_RECRUITER);
