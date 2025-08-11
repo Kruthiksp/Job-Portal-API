@@ -1,5 +1,10 @@
 package com.kruthik.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +21,24 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final JwtUtil jwtUtil;
+	private final PasswordEncoder passwordEncoder;
+	private final UserDetailsService userDetailsService;
 
 	@PostMapping
-	public String generateToken(@RequestBody AuthRequestDTO authRequestDTO) {
-		return jwtUtil.generateToken(authRequestDTO.getEmail());
+	public ResponseEntity<String> generateToken(@RequestBody AuthRequestDTO authRequestDTO) {
+
+		String token = null;
+
+		UserDetails user = userDetailsService.loadUserByUsername(authRequestDTO.getEmail());
+		boolean matches = passwordEncoder.matches(authRequestDTO.getPassword(), user.getPassword());
+
+		if (matches) {
+			token = jwtUtil.generateToken(authRequestDTO.getEmail());
+		} else {
+			throw new RuntimeException("Invalid Username or Password.");
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(token);
 	}
 
 }
