@@ -1,5 +1,7 @@
 package com.kruthik.services.impl;
 
+import java.time.LocalDate;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +44,13 @@ public class UserServiceImpl implements UserService {
 		} else {
 			User dtoToEntity = userMapper.dtoToEntity(userDTO);
 			dtoToEntity.setPassword(passwordEncoder.encode(dtoToEntity.getPassword()));
+			dtoToEntity.setCreateDate(LocalDate.now());
 
 			if (userDTO.getAccountType() == AccountType.Recruiter && userDTO.getCompanyName() != null) {
 				dtoToEntity.setRole(Roles.ROLE_RECRUITER);
 			} else if (userDTO.getAccountType() == AccountType.Job_Seeker) {
 				dtoToEntity.setRole(Roles.ROLE_JOB_SEEKER);
-			} else {
+			} else if (userDTO.getAccountType() == AccountType.Recruiter && userDTO.getCompanyName() == null) {
 				throw new CompanyNameRequiredException("Recruiter must fill the Company Name.");
 			}
 
