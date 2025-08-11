@@ -81,4 +81,16 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(error.getStatusCode()).body(error);
 	}
+
+	/**
+	 * This is a generic exception Handler.
+	 */
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorDTO> handleException(Exception e) {
+
+		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.BAD_REQUEST)
+				.statusCode(HttpStatus.BAD_REQUEST.value()).timestamp(LocalDateTime.now()).build();
+
+		return ResponseEntity.status(error.getStatusCode()).body(error);
+	}
 }

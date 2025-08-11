@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JobResponseDTO {
+public class RecruiterJobResponseDTO {
 
 	private int id;
 	private String title;
