@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.kruthik.dtos.ErrorDTO;
+import com.kruthik.exceptions.ApplicationNotFoundException;
 import com.kruthik.exceptions.CompanyNameRequiredException;
+import com.kruthik.exceptions.JobNotFoundException;
+import com.kruthik.exceptions.ResumeRequiredException;
 import com.kruthik.exceptions.UserAlreadyExistException;
 
 @RestControllerAdvice
@@ -71,10 +74,46 @@ public class GlobalExceptionHandler {
 	}
 
 	/**
+	 * This method is executed when the Job seeker don't attach the resume.
+	 */
+	@ExceptionHandler(ResumeRequiredException.class)
+	public ResponseEntity<ErrorDTO> handleResumeRequiredException(ResumeRequiredException e) {
+
+		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.BAD_REQUEST)
+				.statusCode(HttpStatus.BAD_REQUEST.value()).timestamp(LocalDateTime.now()).build();
+
+		return ResponseEntity.status(error.getStatusCode()).body(error);
+	}
+
+	/**
 	 * This method is executed when the user tries to login with wrong email Id.
 	 */
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public ResponseEntity<ErrorDTO> handleUsernameNotFoundException(UsernameNotFoundException e) {
+
+		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.NOT_FOUND)
+				.statusCode(HttpStatus.NOT_FOUND.value()).timestamp(LocalDateTime.now()).build();
+
+		return ResponseEntity.status(error.getStatusCode()).body(error);
+	}
+
+	/**
+	 * This method is executed when the user tries to login with wrong email Id.
+	 */
+	@ExceptionHandler(JobNotFoundException.class)
+	public ResponseEntity<ErrorDTO> handleJobNotFoundException(JobNotFoundException e) {
+
+		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.NOT_FOUND)
+				.statusCode(HttpStatus.NOT_FOUND.value()).timestamp(LocalDateTime.now()).build();
+
+		return ResponseEntity.status(error.getStatusCode()).body(error);
+	}
+
+	/**
+	 * This method is executed when the user tries to login with wrong email Id.
+	 */
+	@ExceptionHandler(ApplicationNotFoundException.class)
+	public ResponseEntity<ErrorDTO> handleApplicationNotFoundException(ApplicationNotFoundException e) {
 
 		ErrorDTO error = ErrorDTO.builder().message(e.getMessage()).httpStatus(HttpStatus.NOT_FOUND)
 				.statusCode(HttpStatus.NOT_FOUND.value()).timestamp(LocalDateTime.now()).build();

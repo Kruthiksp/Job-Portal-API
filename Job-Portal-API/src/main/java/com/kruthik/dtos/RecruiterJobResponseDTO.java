@@ -22,5 +22,5 @@ public class RecruiterJobResponseDTO {
 	private LocalDate createDate;
 
 	private RecruiterSummaryDTO recruiter;
-	private List<ApplicationSummaryDTO> applications;
+	private List<RecruiterApplicationResponseDTO> applications;
 }

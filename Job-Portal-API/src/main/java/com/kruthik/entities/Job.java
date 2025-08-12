@@ -16,9 +16,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(exclude = {"applications"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -33,6 +35,9 @@ public class Job {
 	private String location;
 	private double salary;
 	private LocalDate createDate;
+	private LocalDate lastDateToApply;
+	@Builder.Default
+	private boolean isExpired = false;
 
 	@ManyToOne
 	@JoinColumn(name = "recruiter_id")

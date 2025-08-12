@@ -1,5 +1,7 @@
 package com.kruthik.dtos;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.kruthik.enums.AccountType;
 
 import jakarta.validation.constraints.NotBlank;
@@ -34,5 +36,7 @@ public class UserRequestDTO {
 	private AccountType accountType; // Recruiter or Job_Seeker
 
 	private String companyName; // for Recruiters
+	
+	private MultipartFile resume;
 
 }

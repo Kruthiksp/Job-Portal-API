@@ -1,5 +1,7 @@
 package com.kruthik.dtos;
 
+import java.time.LocalDate;
+
 import com.kruthik.enums.ApplicationStatus;
 
 import lombok.AllArgsConstructor;
@@ -8,12 +10,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class ApplicationSummaryDTO {
-    private int id;
-    private String resume;
-    private ApplicationStatus status;
-}
+public class JobSeekerApplicationResponseDTO {
 
+	private int id;
+	private String resume;
+	private ApplicationStatus status;
+	private LocalDate appliedDate;
+
+}
