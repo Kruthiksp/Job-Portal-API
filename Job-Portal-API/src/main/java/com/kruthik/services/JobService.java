@@ -19,4 +19,8 @@ public interface JobService {
 	Page<RecruiterJobResponseDTO> findAllJobsByRecruiter(Authentication authentication, int pageNumber, int pageSize,
 			String sortBy, boolean descending);
 
+	void updateJob(int jobId, JobRequestDTO jobRequestDTO, Authentication authentication);
+
+	void deleteJob(int jobId, Authentication authentication);
+
 }

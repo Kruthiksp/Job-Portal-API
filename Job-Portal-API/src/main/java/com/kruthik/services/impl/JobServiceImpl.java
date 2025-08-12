@@ -22,6 +22,7 @@ import com.kruthik.repositories.UserRepository;
 import com.kruthik.services.JobService;
 import com.kruthik.util.JobMapper;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -61,7 +62,7 @@ public class JobServiceImpl implements JobService {
 	@Override
 	public PublicJobResponseDTO findJobById(int jobId) {
 
-		Job byId = jobRepository.findById(jobId)
+		Job byId = jobRepository.findByIdAndIsExpiredFalse(jobId)
 				.orElseThrow(() -> new JobNotFoundException("Job not found with the Id:" + jobId));
 
 		return jobMapper.entityToPublicDto(byId);
@@ -74,14 +75,14 @@ public class JobServiceImpl implements JobService {
 		Sort sort = Sort.by(direction, sortBy);
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-		Page<Job> allJobsEntity = jobRepository.findAll(pageable);
+		Page<Job> allJobsEntity = jobRepository.findAllByIsExpiredFalse(pageable);
 
 		return allJobsEntity.map(jobMapper::entityToPublicDto);
 	}
 
 	@Override
-	public Page<RecruiterJobResponseDTO> findAllJobsByRecruiter(Authentication authentication, int pageNumber, int pageSize,
-			String sortBy, boolean descending) {
+	public Page<RecruiterJobResponseDTO> findAllJobsByRecruiter(Authentication authentication, int pageNumber,
+			int pageSize, String sortBy, boolean descending) {
 
 		User recruiter = userRepository.findByEmail(authentication.getName()).orElseThrow();
 
@@ -92,6 +93,37 @@ public class JobServiceImpl implements JobService {
 		Page<Job> allJobsEntity = jobRepository.findAllByUser(recruiter, pageable);
 
 		return allJobsEntity.map(jobMapper::entityToRecruiterDto);
+	}
+
+	@Override
+	@Transactional
+	public void updateJob(int jobId, JobRequestDTO jobRequestDTO, Authentication authentication) {
+		User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
+				() -> new UsernameNotFoundException("User not found with email: " + authentication.getName()));
+
+		Job job = jobRepository.findByIdAndUser(jobId, user)
+				.orElseThrow(() -> new JobNotFoundException("You don't own a Job with the Id:" + jobId));
+
+		job.setTitle(jobRequestDTO.getTitle());
+		job.setDescription(jobRequestDTO.getDescription());
+		job.setLocation(jobRequestDTO.getLocation());
+		job.setSalary(jobRequestDTO.getSalary());
+		job.setLastDateToApply(jobRequestDTO.getLastDateToApply());
+
+	}
+
+	@Override
+	@Transactional
+	public void deleteJob(int jobId, Authentication authentication) {
+		User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
+				() -> new UsernameNotFoundException("User not found with email: " + authentication.getName()));
+
+		Job job = jobRepository.findByIdAndUser(jobId, user)
+				.orElseThrow(() -> new JobNotFoundException("You don't own a Job with the Id:" + jobId));
+
+		if (job != null) {
+			job.setExpired(true);
+		}
 	}
 
 }

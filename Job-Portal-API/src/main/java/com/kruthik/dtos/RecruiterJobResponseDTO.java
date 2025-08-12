@@ -20,7 +20,8 @@ public class RecruiterJobResponseDTO {
 	private String location;
 	private double salary;
 	private LocalDate createDate;
+	private LocalDate lastDateToApply;
 
-	private RecruiterSummaryDTO recruiter;
+//	private RecruiterSummaryDTO recruiter;
 	private List<RecruiterApplicationResponseDTO> applications;
 }

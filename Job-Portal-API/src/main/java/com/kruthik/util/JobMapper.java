@@ -13,7 +13,6 @@ public interface JobMapper {
 
 	Job dtoToEntity(JobRequestDTO dto);
 
-	@Mapping(source = "user", target = "recruiter")
 	RecruiterJobResponseDTO entityToRecruiterDto(Job entity);
 
 	@Mapping(source = "user", target = "recruiter")
