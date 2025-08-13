@@ -1,12 +1,14 @@
 package com.kruthik.services.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import com.kruthik.repositories.UserRepository;
 import com.kruthik.services.JobService;
 import com.kruthik.util.JobMapper;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -124,6 +127,20 @@ public class JobServiceImpl implements JobService {
 		if (job != null) {
 			job.setExpired(true);
 		}
+	}
+
+	@Override
+	@Scheduled(cron = "0 0 0 * * ?")
+	@Transactional
+	public void deleteExpiredJobs() {
+		List<Job> expiredJobs = jobRepository.findAllByIsExpiredFalseAndLastDateToApplyBefore(LocalDate.now());
+		expiredJobs.stream().forEach(job -> job.setExpired(true));
+	}
+	
+	@PostConstruct
+	@Transactional
+	public void deleteExpireJobsAtStartup() {
+	    deleteExpiredJobs();
 	}
 
 }

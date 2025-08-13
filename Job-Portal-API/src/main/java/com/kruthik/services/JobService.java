@@ -22,5 +22,7 @@ public interface JobService {
 	void updateJob(int jobId, JobRequestDTO jobRequestDTO, Authentication authentication);
 
 	void deleteJob(int jobId, Authentication authentication);
+	
+	void deleteExpiredJobs();
 
 }

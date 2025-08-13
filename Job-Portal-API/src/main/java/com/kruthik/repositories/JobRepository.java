@@ -1,5 +1,7 @@
 package com.kruthik.repositories;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,5 +20,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
 	Page<Job> findAllByUser(User recruiter, Pageable pageable);
 	
 	Optional<Job> findByIdAndUser(int jobId, User user);
+	
+	List<Job> findAllByIsExpiredFalseAndLastDateToApplyBefore(LocalDate currentDate);
 
 }
