@@ -21,11 +21,16 @@ import com.kruthik.dtos.RecruiterJobResponseDTO;
 import com.kruthik.entities.Job;
 import com.kruthik.services.JobService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/job")
 @RequiredArgsConstructor
+@Tag(
+	    name = "Job Management",
+	    description = "Endpoints to post, edit, delete, and fetch jobs. Public endpoints for viewing jobs and recruiter-specific endpoints for managing posted jobs."
+	)
 public class JobController {
 
 	private final JobService jobService;

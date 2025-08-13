@@ -12,12 +12,14 @@ import com.kruthik.dtos.UserRequestDTO;
 import com.kruthik.entities.User;
 import com.kruthik.services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Tag(name = "User Management", description = "Endpoints for user registration, login, profile management, and account details (Job Seekers and Recruiters).")
 public class UserController {
 
 	private final UserService userService;
@@ -33,5 +35,5 @@ public class UserController {
 	public String test() {
 		return "login";
 	}
-	
+
 }

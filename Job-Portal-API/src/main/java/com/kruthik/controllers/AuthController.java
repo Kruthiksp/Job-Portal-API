@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kruthik.dtos.AuthRequestDTO;
 import com.kruthik.util.JwtUtil;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/authenticate")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Endpoints for user login, logout, and token management using JWT-based authentication.")
 public class AuthController {
 
 	private final JwtUtil jwtUtil;

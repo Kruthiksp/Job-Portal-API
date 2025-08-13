@@ -15,11 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kruthik.dtos.JobSeekerApplicationResponseDTO;
 import com.kruthik.services.ApplicationService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/job")
 @RequiredArgsConstructor
+@Tag(
+	    name = "Job Applications",
+	    description = "Endpoints for job seekers to apply for jobs, view their applications, and recruiters to view applications for their posted jobs."
+	)
 public class ApplicationController {
 
 	private final ApplicationService applicationService;
